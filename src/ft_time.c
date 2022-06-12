@@ -6,55 +6,42 @@
 /*   By: yoseo <yoseo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 04:42:33 by yoseo             #+#    #+#             */
-/*   Updated: 2022/06/09 16:26:21 by yoseo            ###   ########.fr       */
+/*   Updated: 2022/06/13 01:39:45 by yoseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_time.h"
 
-unsigned long time_diff(struct timeval *s, struct timeval *e)
+unsigned long time_diff(t_time_helper *time)
 {
 	unsigned long	sec_ms;
 	unsigned long	ms;
 	
-	sec_ms = (e->tv_sec-s->tv_sec)*1000;
-	ms = (e->tv_usec - s->tv_usec)/1000;
+	sec_ms = (time->end.tv_sec - time->start.tv_sec) * 1000;
+	ms = (time->end.tv_usec - time->start.tv_usec) / 1000;
 	return sec_ms + ms;
 }
 
-unsigned long ft_usleep(unsigned long ms)
+unsigned long	flow_time(t_time_helper *time)
 {
-	struct timeval	start;
-	struct timeval	end;
-	unsigned long	diff;
+	gettimeofday(&time->end, 0);
+	return time_diff(time);
+}
+
+void	ft_sleep(unsigned long milisec)
+{
+	t_time_helper	time;
 	
-	gettimeofday(&start, 0);
+	start_time(&time);
 	while (1)
 	{
-		gettimeofday(&end, 0);
-		diff = time_diff(&start, &end);
-		if (diff >= ms)
+		if (flow_time(&time) >= milisec)
 			break ;
 		usleep(1000);
 	}
-	return diff;
 }
 
 void	start_time(t_time_helper *time)
 {
 	gettimeofday(&time->start, 0);
-	time->cur_time = 0;
-}
-
-void	flow_time(t_time_helper *time)
-{
-	gettimeofday(&time->end, 0);
-	time->cur_time = time_diff(&time->start, &time->end);
-}
-
-int	check_overtime(t_time_helper *time, unsigned long check)
-{
-	if (time->cur_time > check)
-		return 0;
-	return 1;
 }

@@ -6,7 +6,7 @@
 /*   By: yoseo <yoseo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 04:37:34 by yoseo             #+#    #+#             */
-/*   Updated: 2022/06/09 11:16:44 by yoseo            ###   ########.fr       */
+/*   Updated: 2022/06/12 16:08:03 by yoseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <sys/time.h>
 # include <unistd.h>
+
 typedef struct s_time_helper
 {
 	struct timeval		start;
@@ -22,10 +23,9 @@ typedef struct s_time_helper
 	unsigned long		cur_time;
 } 	t_time_helper;
 
+unsigned long 	time_diff(t_time_helper *time);
+unsigned long	flow_time(t_time_helper *time);
 void			start_time(t_time_helper *time);
-void			flow_time(t_time_helper *time);
-unsigned long 	time_diff(struct timeval *s, struct timeval *e);
-unsigned long	ft_usleep(unsigned long ms);
-int				check_overtime(t_time_helper *time, unsigned long check);
+void			ft_sleep(unsigned long ms);
 
 #endif

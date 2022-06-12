@@ -6,41 +6,18 @@
 /*   By: yoseo <yoseo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 20:01:40 by yoseo             #+#    #+#             */
-/*   Updated: 2022/06/09 18:57:46 by yoseo            ###   ########.fr       */
+/*   Updated: 2022/06/13 01:56:22 by yoseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "philosophers.h"
 
-void *thread_philosopher(void *arg)
-{
-	t_philosopher	*philo;
-	
-	philo = (t_philosopher *)arg;
-
-	start_time(&philo->time);
-	if (philo->num % 2)
-	{
-		ft_usleep(3);
-	}
-	while(1)
-	{
-		if (philo_action(philo) != ALLIVE)
-			break;
-	}
-	if (philo->lock & 2)
-		pthread_mutex_unlock(philo->second_fork);
-	if (philo->lock & 1)
-		pthread_mutex_unlock(philo->first_fork);
-	return NULL;
-}
-
 void	init_philo(t_philosopher *philo, size_t	number, t_info *info)
 {
-	size_t	right;
+	//size_t	right;
 	size_t	left;
 	
-	right = number;
+	//right = number;
 	if (number == 1)
 		left = info->philo_count;
 	else
@@ -48,54 +25,29 @@ void	init_philo(t_philosopher *philo, size_t	number, t_info *info)
 	
 	philo->num = number;
 	philo->left_num = left;
+	
 	philo->eat = 0;
 	philo->time_to_die = info->time_to_die;
 	philo->time_to_eat = info->time_to_eat;
 	philo->time_to_sleep = info->time_to_sleep;
 	philo->must_eat = info->must_eat;
+	philo->state = ALIIVE;
+	philo->global_lock = &info->global_lock;
+	philo->global_time = &info->global_time;
+	
 	philo->lock = 0;
-
-	// philo->first_fork = &info->forks[right];
-	// philo->second_fork = &info->forks[left];
-
-	// if (philo->num % 2)
-	// {
-	// 	philo->first_fork = &info->forks[left];
-	// 	philo->second_fork = &info->forks[right];
-	// }
-	// else
-	// {
-	// 	philo->first_fork = &info->forks[right];
-	// 	philo->second_fork = &info->forks[left];
-	// }
-	if (info->philo_count % 2 == 0)
+	
+	if (philo->num % 2)
 	{
-		if (philo->num % 2)
-		{
-			philo->first_fork = &info->forks[right];
-			philo->second_fork = &info->forks[left];
-		}
-		else
-		{
-			philo->first_fork = &info->forks[left];
-			philo->second_fork = &info->forks[right];
-		}
+
+		philo->first_fork = &info->forks[philo->num];
+		philo->second_fork = &info->forks[philo->left_num];
 	}
 	else
 	{
-		if (philo->num % 2)
-		{
-			philo->first_fork = &info->forks[left];
-			philo->second_fork = &info->forks[right];
-		}
-		else
-		{
-			philo->first_fork = &info->forks[right];
-			philo->second_fork = &info->forks[left];
-		}
+		philo->first_fork = &info->forks[philo->left_num];
+		philo->second_fork = &info->forks[philo->num];
 	}
-	
-	
 }
 
 int	init_info(int argc, char **argv, t_info *info)
@@ -112,63 +64,37 @@ int	init_info(int argc, char **argv, t_info *info)
 		info->must_eat = ft_atoi(argv[5]);
 	info->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * info->philo_count + 1);
 	info->philosophers = (t_philosopher *)malloc(sizeof(t_philosopher) * info->philo_count);
+	
 	if (info->forks == NULL || info->philosophers == NULL)
 		return 0;
-	for (size_t i = 0; i < info->philo_count + 10; i++)
+	for (size_t i = 0; i < info->philo_count + 1; i++)
 		pthread_mutex_init(&info->forks[i], NULL);
+	pthread_mutex_init(&info->global_lock, NULL);
 	return 1;
 }
+
+
 
 int main(int argc, char **argv)
 {
 	t_info				info;
 	if (init_info(argc, argv, &info) == 0)
 		return 0;
-		
-	safe_print_action(NULL, NULL);
-	
-	// for (size_t i = 0; i < info.philo_count; i++)
-	// {
-	// 	if ((i + 1) % 2 == 0)
-	// 	{
-	// 		init_philo(&info.philosophers[i], i + 1, &info);
-	// 		pthread_create(&info.philosophers[i].t_id, NULL, thread_philosopher, &info.philosophers[i]);
-	// 	}
-	// }
-	
-	// for (size_t i = 0; i < info.philo_count; i++)
-	// {
-	// 	if ((i + 1) % 2)
-	// 	{
-	// 		init_philo(&info.philosophers[i], i + 1, &info);
-	// 		pthread_create(&info.philosophers[i].t_id, NULL, thread_philosopher, &info.philosophers[i]);
-	// 	}
-	// }
 
+	start_time(&info.global_time);
 	for (size_t i = 0; i < info.philo_count; i++)
 	{
 		init_philo(&info.philosophers[i], i + 1, &info);
-		pthread_create(&info.philosophers[i].t_id, NULL, thread_philosopher, &info.philosophers[i]);
+		start_time(&info.philosophers[i].time);
+		pthread_create(&info.philosophers[i].t_id, NULL, philo_life_cycle, &info.philosophers[i]);
 	}
-
-		
+	
+	pthread_t m_id;
+	pthread_create(&m_id, NULL, monitoring, &info);
+	
 	for (size_t i = 0; i < info.philo_count; i++)
 		pthread_join(info.philosophers[i].t_id, NULL);
-	
-	for (size_t i = 0; i < info.philo_count; i++)
-	{
-		printf("id : %ld eat : %ld \n", info.philosophers[i].num, info.philosophers[i].eat);
-	}
-	
-	// while (1)
-	// {
-	// 	sleep(60);
-	// 	system("cls");
-	// 	for (size_t i = 0; i < info.philo_count; i++)
-	// 	{
-	// 		printf("id : %ld eat : %ld \n", info.philosophers[i].num ,info.philosophers[i].eat);
-	// 	}
-	// 	exit(1);
-	// }
+	pthread_join(m_id, NULL);
+	state_print(&info);
 	return 0;
 }
