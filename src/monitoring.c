@@ -14,20 +14,20 @@ int	check_philosophers(t_info *info)
 	while (i < info->philo_count)
 	{
 		philo = &info->philosophers[i];
-		if (flow_time(&philo->time) > philo->time_to_die)
+		if (philo->state == ALIIVE && flow_time(&philo->time) > philo->time_to_die)
 		{
 			is_philo_die = DIE;
 			break ;
 		}
-		if (philo->eat == philo->must_eat)
+		if (philo->state == FULL && philo->eat == philo->must_eat)
 			++is_all_eat;
 		++i;
 	}
 	pthread_mutex_unlock(&info->global_lock);
-	if (is_philo_die == DIE)
-		is_philo_die = philo_action(philo, is_philo_die);
 	if (is_all_eat == info->philo_count)
 		is_philo_die = CLEAR;
+	if (is_philo_die == DIE)
+		is_philo_die = philo_action(philo, is_philo_die);
 	return is_philo_die;
 }
 
@@ -41,6 +41,7 @@ void	*monitoring(void *arg)
 		if (check_philosophers(info) != ALIIVE)
 			break ;
 		//ft_sleep(3);
+		//printf("monitoring....\n");
 	}
 	return NULL;
 }

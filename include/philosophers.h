@@ -72,7 +72,7 @@ typedef struct s_philosopher
 	pthread_mutex_t *second_fork;
 	pthread_mutex_t *first_fork;
 
-	t_state state;
+	size_t			state;
 	
 	pthread_mutex_t *global_lock;
 	t_time_helper 	*global_time;
@@ -97,8 +97,8 @@ typedef struct s_info
 
 void			*philo_life_cycle(void *arg);
 int				ft_atoi(char *str);
-t_state	philo_action(t_philosopher *philo, t_state state);
-void	print_log(t_philosopher *p, t_state s);
-void	state_print(t_info	*info);
-void	*monitoring(void *arg);
+t_state			philo_action(t_philosopher *philo, t_state state);
+void			print_log(t_philosopher *p, t_state s);
+void			state_print(t_info	*info);
+void			*monitoring(void *arg);
 #endif

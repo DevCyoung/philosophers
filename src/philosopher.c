@@ -21,14 +21,21 @@ void	print_log(t_philosopher *p, t_state s)
 
 t_state	try_print_log(t_philosopher *philo, t_state state)
 {
-	if (flow_time(&philo->time) > philo->time_to_die)
+	if (philo->state == ALIIVE && flow_time(&philo->time) > philo->time_to_die)
+	{
 		state = DIE;
-	else if (state == EAT_DONE)
+		philo->state = DIE;
+	}
+	else if (philo->state == ALIIVE && state == EAT_DONE)
 	{
 		++philo->eat;
-		start_time(&philo->time);
-		if (philo->eat == philo->must_eat)
+		if (philo->eat >= philo->must_eat)
+		{
+			philo->state = FULL;
+			state = CLEAR;
 			return FULL;
+		}
+		start_time(&philo->time);
 	}
 	print_log(philo, state);
 	return state;
@@ -44,12 +51,14 @@ t_state	philo_action(t_philosopher *philo, t_state philo_state)
 	if (is_print)
 	{
 		philo_state = try_print_log(philo, philo_state);
-		if ((philo_state == FULL))
-			thread_state = CLEAR;
 		if (philo_state == DIE)
 		{
 			thread_state = CLEAR;
 			is_print = 0;
+		}
+		if (philo_state == FULL)
+		{
+			thread_state = CLEAR;
 		}
 	}
 	else
