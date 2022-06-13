@@ -19,28 +19,19 @@
 # include <signal.h>
 # include "ft_time.h"
 
-// #define TAKE_FORK	"has taken a fork"
-// #define EAT 		"is eating"
-// #define SLEEP		"is sleeping"
-// #define THINK		"is thinking"
-// #define IS_DIE		0
+#define ALL_ALIVE	0
+#define WHO_DIE		1
+//#define ALL_FULL	2
+#define NOT_FULL	4
 
-// #define ALL_EAT		1
-// #define EXIT		3
-// #define SUCESS		4
-
-// #define DEAD			1
-// #define ALREADY_DEAD	2
-// #define IM_FULL			4
-// #define ALLIVE			0
+#define TAKE_FIRST_FORK 5
+#define TAKE_SECOND_FORK 6
 
 
 typedef enum e_philo_state
 {
-	ALIIVE = 0,
-	TAKE_FORK_FIRST = 1,
-	TAKE_FORK_SECOND = 2,
-	TAKE_FORK = 3,
+	ALIVE = 1,
+	TAKE_FORK = 2,
 	EATING = 4,
 	FIN_CHECK = 8,
 	FULL = 16,
@@ -50,13 +41,10 @@ typedef enum e_philo_state
 	FINISH = 256,
 	EAT_DONE = 512,
 	CLEAR = 1024,
+	HUNGRY = 2048,
+	ALL_FULL = HUNGRY << 1,
+	UNLOCK = ALL_FULL << 1,
 }	t_state;
-
-typedef struct s_philo_helper
-{
-	t_time_helper	global;
-	
-}	t_philo_helper;
 
 typedef struct s_philosopher
 {
@@ -86,6 +74,7 @@ typedef struct s_info
 {
 	t_philosopher	*philosophers;
 	pthread_mutex_t	*forks;
+
 	size_t			philo_count;
 	size_t			time_to_die;
 	size_t			time_to_eat;
@@ -99,8 +88,12 @@ typedef struct s_info
 
 void			*philo_life_cycle(void *arg);
 int				ft_atoi(char *str);
-t_state			philo_action(t_philosopher *philo, t_state state);
+t_state			philo_act(t_philosopher *philo, t_state state);
 void			print_log(t_philosopher *p, t_state s);
 void			state_print(t_info	*info);
 void			*monitoring(void *arg);
+int	check_philo_die(t_philosopher *philo);
+int	check_philo_full(t_philosopher *philo);
+void	philo_unlock(t_philosopher *philo);
+int	is_error(int argc, char **argv);
 #endif

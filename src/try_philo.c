@@ -3,38 +3,43 @@
 int	try_catch_fork(t_philosopher *philo)
 {
 	pthread_mutex_lock(philo->first_fork);
-	if (philo_action(philo, TAKE_FORK_FIRST) != ALIIVE)
+	philo->lock |= 1;
+	if (philo_act(philo, TAKE_FIRST_FORK) != ALIVE)
 		return CLEAR;
 	pthread_mutex_lock(philo->second_fork);
-	if (philo_action(philo, TAKE_FORK_SECOND) != ALIIVE)
+	philo->lock |= 2;
+	if (philo_act(philo, TAKE_SECOND_FORK) != ALIVE)
 		return CLEAR;
-	return ALIIVE;
+	philo->lock = 0;
+	pthread_mutex_unlock(philo->second_fork);
+	pthread_mutex_unlock(philo->first_fork);
+	return ALIVE;
 }
 
 int	try_eat(t_philosopher *philo)
 {
-	if (philo_action(philo, EATING) != ALIIVE)
+	if (philo_act(philo, EATING) != ALIVE)
 		return CLEAR;
 	ft_sleep(philo->time_to_eat);
-	if (philo_action(philo, EAT_DONE) != ALIIVE)
+	if (philo_act(philo, EAT_DONE) != ALIVE)
 		return CLEAR;
-	return ALIIVE;
+	return ALIVE;
 }
 
 int	try_sleep(t_philosopher *philo)
 {
-	if (philo_action(philo, SLEEPING) != ALIIVE)
+	if (philo_act(philo, SLEEPING) != ALIVE)
 		return CLEAR;
 	ft_sleep(philo->time_to_sleep);
-	return ALIIVE;
+	return ALIVE;
 }
 
 int try_think(t_philosopher *philo)
 {
-	if (philo_action(philo, THINKING) != ALIIVE)
+	if (philo_act(philo, THINKING) != ALIVE)
 		return CLEAR;
 	ft_sleep(3);
-	return ALIIVE;
+	return ALIVE;
 }
 
 void	*philo_life_cycle(void *arg)
@@ -55,11 +60,9 @@ void	*philo_life_cycle(void *arg)
 		if (try_think(philo) == CLEAR)
 			break;
 	}
-
-	//printf("lock : %ld break\n", philo->lock);
-	// if ((philo->lock & 2) == 2)
-	// 	pthread_mutex_unlock(philo->second_fork);
-	// if ((philo->lock & 1) == 1)
-	// 	pthread_mutex_unlock(philo->first_fork);
+	if (philo->lock & 2)
+		pthread_mutex_unlock(philo->second_fork);
+	if (philo->lock & 1)
+		pthread_mutex_unlock(philo->first_fork);
 	return NULL;
 }

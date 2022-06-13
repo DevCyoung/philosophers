@@ -16,6 +16,13 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+# define ERROR_ARGC				0x01
+# define ERROR_PHILO_COUNT		0x02
+# define ERROR_EAT_TIME			0x04
+# define ERROR_DIE_TIME			0x08
+# define ERROR_SLEEP_TIME		0x10
+# define ERROR_MUST_EAT			0x20
+
 typedef struct s_time_helper
 {
 	struct timeval		start;

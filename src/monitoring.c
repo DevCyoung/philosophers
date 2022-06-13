@@ -1,50 +1,63 @@
 #include "philosophers.h"
 
+int	check_philo_die(t_philosopher *philo)
+{	
+	if (philo->state & ALIVE)
+	{
+		if ((philo->state & HUNGRY) == 0)
+			return ALIVE;
+		if (flow_time(&philo->time) < philo->time_to_die)
+			return ALIVE;
+	}
+	return DIE;
+}
+
+int	check_philo_full(t_philosopher *philo)
+{
+	if (philo->state & HUNGRY)
+		return HUNGRY;
+	return FULL;
+}
+
 int	check_philosophers(t_info *info)
 {
 	unsigned int	i;
-	unsigned int	is_philo_die;
-	unsigned int	is_all_eat;
-	t_philosopher *philo;
-
-	i = 0;
-	is_philo_die = ALIIVE;
-	is_all_eat = 0;
+	unsigned int	philos_state;
+	t_philosopher 	*philo;
 
 	pthread_mutex_lock(&info->global_lock);
-
+	i = 0;
+	philos_state = 0;
 	while (i < info->philo_count)
 	{
 		philo = &info->philosophers[i];
-		if (philo->state == ALIIVE && flow_time(&philo->time) > philo->time_to_die)
-		{
-			is_philo_die = DIE;
-			break ;
-		}
-		if (philo->state == FULL && philo->eat == philo->must_eat)
-			++is_all_eat;
+		philos_state |= check_philo_die(philo) | check_philo_full(philo);
+		if ((philos_state & ALIVE) == 0)
+			break;
 		++i;
 	}
-
 	pthread_mutex_unlock(&info->global_lock);
-
-	if (is_all_eat == info->philo_count)
-		is_philo_die = CLEAR;
-	if (is_philo_die == DIE)
-		is_philo_die = philo_action(philo, is_philo_die);
-	return is_philo_die;
+	if ((philos_state & ALIVE) == 0)
+	{
+		philo_act(philo, DIE);
+		if (info->philo_count == 1)
+			pthread_mutex_unlock(philo->first_fork);
+	}
+	return philos_state;
 }
 
 void	*monitoring(void *arg)
 {
-	t_info	*info;
-
+	t_info			*info;
+	unsigned int	philos_state;
 	info = (t_info *)arg;
 	while (1)
 	{
-		if (check_philosophers(info) != ALIIVE)
+		philos_state = check_philosophers(info);
+		if ((philos_state & ALIVE) == 0 ||
+			(philos_state & HUNGRY) == 0)
 			break ;
-		ft_sleep(3);
+		ft_sleep(2);
 	}
 	return NULL;
 }
