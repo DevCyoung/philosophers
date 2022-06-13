@@ -10,7 +10,9 @@ int	check_philosophers(t_info *info)
 	i = 0;
 	is_philo_die = ALIIVE;
 	is_all_eat = 0;
+
 	pthread_mutex_lock(&info->global_lock);
+
 	while (i < info->philo_count)
 	{
 		philo = &info->philosophers[i];
@@ -23,7 +25,9 @@ int	check_philosophers(t_info *info)
 			++is_all_eat;
 		++i;
 	}
+
 	pthread_mutex_unlock(&info->global_lock);
+
 	if (is_all_eat == info->philo_count)
 		is_philo_die = CLEAR;
 	if (is_philo_die == DIE)
@@ -40,8 +44,7 @@ void	*monitoring(void *arg)
 	{
 		if (check_philosophers(info) != ALIIVE)
 			break ;
-		//ft_sleep(3);
-		//printf("monitoring....\n");
+		ft_sleep(3);
 	}
 	return NULL;
 }

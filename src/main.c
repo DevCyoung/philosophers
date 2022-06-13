@@ -27,6 +27,7 @@ void	init_philo(t_philosopher *philo, size_t	idx, t_info *info)
 	philo->num = idx + 1;
 	philo->left_num = left_idx;
 	philo->eat = 0;
+	philo->lock = 0;
 	philo->state = ALIIVE;
 	philo->time_to_die = info->time_to_die;
 	philo->time_to_eat = info->time_to_eat;
@@ -34,12 +35,8 @@ void	init_philo(t_philosopher *philo, size_t	idx, t_info *info)
 	philo->must_eat = info->must_eat;
 	philo->global_lock = &info->global_lock;
 	philo->global_time = &info->global_time;
-	
-	philo->lock = 0;
-	
 	if (philo->num % 2)
 	{
-
 		philo->first_fork = &info->forks[idx];
 		philo->second_fork = &info->forks[left_idx];
 	}
@@ -84,7 +81,7 @@ int main(int argc, char **argv)
 	start_time(&info.global_time);
 	for (size_t i = 0; i < info.philo_count; i++)
 		init_philo(&info.philosophers[i], i, &info);
-		
+
 	for (size_t i = 0; i < info.philo_count; i++)
 		pthread_create(&info.philosophers[i].t_id, NULL, philo_life_cycle, &info.philosophers[i]);
 	

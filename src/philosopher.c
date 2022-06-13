@@ -7,8 +7,11 @@ void	print_log(t_philosopher *p, t_state s)
 	
 	global_time = flow_time(p->global_time);
 	philo_num = p->num;
-	if (s == TAKE_FORK)
+	if (s & TAKE_FORK)
+	{
 		printf("%ld %ld %s\n", global_time, philo_num, "has taken a fork");
+		p->lock |= s;
+	}
 	else if (s == EATING)
 		printf("%ld %ld %s\n", global_time, philo_num, "is eating");
 	else if (s == THINKING)
@@ -33,8 +36,9 @@ t_state	try_print_log(t_philosopher *philo, t_state state)
 		{
 			philo->state = FULL;
 			state = CLEAR;
-			return FULL;
 		}
+		if (state == CLEAR)
+			return FULL;
 		start_time(&philo->time);
 	}
 	print_log(philo, state);
@@ -45,12 +49,14 @@ t_state	philo_action(t_philosopher *philo, t_state philo_state)
 {
 	static char				is_print = 1;
 	t_state 				thread_state;
+	t_state 				is_eat_done;	
 
 	pthread_mutex_lock(philo->global_lock);
 	thread_state = ALIIVE;
 	if (is_print)
 	{
 		philo_state = try_print_log(philo, philo_state);
+		is_eat_done = philo_state;
 		if (philo_state == DIE)
 		{
 			thread_state = CLEAR;
@@ -63,6 +69,15 @@ t_state	philo_action(t_philosopher *philo, t_state philo_state)
 	}
 	else
 		thread_state = CLEAR;
+	if (is_print == 0 || philo_state == FULL || thread_state == CLEAR || is_eat_done == EAT_DONE)
+	{
+		if (philo->lock & TAKE_FORK_SECOND)
+			pthread_mutex_unlock(philo->second_fork);
+		if (philo->lock & TAKE_FORK_FIRST)
+			pthread_mutex_unlock(philo->first_fork);
+		philo->lock = 0;
+	}
+
 	pthread_mutex_unlock(philo->global_lock);
 	return thread_state;
 }

@@ -37,8 +37,10 @@
 
 typedef enum e_philo_state
 {
-	ALIIVE = 1,
-	TAKE_FORK = 2,
+	ALIIVE = 0,
+	TAKE_FORK_FIRST = 1,
+	TAKE_FORK_SECOND = 2,
+	TAKE_FORK = 3,
 	EATING = 4,
 	FIN_CHECK = 8,
 	FULL = 16,
