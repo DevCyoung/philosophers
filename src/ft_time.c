@@ -12,26 +12,26 @@
 
 #include "ft_time.h"
 
-unsigned long time_diff(t_time_helper *time)
+unsigned long	time_diff(t_time_helper *time)
 {
 	unsigned long	sec_ms;
 	unsigned long	ms;
-	
+
 	sec_ms = (time->end.tv_sec - time->start.tv_sec) * 1000;
 	ms = (time->end.tv_usec - time->start.tv_usec) / 1000;
-	return sec_ms + ms;
+	return (sec_ms + ms);
 }
 
 unsigned long	flow_time(t_time_helper *time)
 {
 	gettimeofday(&time->end, 0);
-	return time_diff(time);
+	return (time_diff(time));
 }
 
 void	ft_sleep(unsigned long milisec)
 {
 	t_time_helper	time;
-	
+
 	start_time(&time);
 	while (1)
 	{

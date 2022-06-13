@@ -1,4 +1,16 @@
-# include "philosophers.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoseo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/14 02:54:53 by yoseo             #+#    #+#             */
+/*   Updated: 2022/06/14 02:54:54 by yoseo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philosophers.h"
 
 int	ft_atoi(char *str)
 {
@@ -20,7 +32,7 @@ int	ft_atoi(char *str)
 	return (((int)answer) * is_plus);
 }
 
-void	 print_error(int error)
+void	print_error(int error)
 {
 	if (error & ERROR_ARGC)
 	{
@@ -37,7 +49,7 @@ void	 print_error(int error)
 	if (error & ERROR_SLEEP_TIME)
 		printf("ERROR_SLEEP_TIME: check your time_to_sleep\n");
 	if (error & ERROR_MUST_EAT)
-		printf("ERROR_MUST_EAT: check your [number_of_times_each_philosopher_must_eat]\n");
+		printf("ERROR_MUST_EAT: check your [philosopher_must_eat]\n");
 }
 
 int	is_error(int argc, char **argv)
@@ -49,7 +61,7 @@ int	is_error(int argc, char **argv)
 	{
 		error = ERROR_ARGC;
 		print_error(error);
-		return error;
+		return (error);
 	}
 	if (ft_atoi(argv[1]) <= 0)
 		error |= ERROR_PHILO_COUNT;
@@ -62,5 +74,5 @@ int	is_error(int argc, char **argv)
 	if (argc == 6 && ft_atoi(argv[5]) <= 0)
 		error |= ERROR_MUST_EAT;
 	print_error(error);
-	return error;
+	return (error);
 }

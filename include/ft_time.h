@@ -28,9 +28,9 @@ typedef struct s_time_helper
 	struct timeval		start;
 	struct timeval		end;
 	unsigned long		cur_time;
-} 	t_time_helper;
+}	t_time_helper;
 
-unsigned long 	time_diff(t_time_helper *time);
+unsigned long	time_diff(t_time_helper *time);
 unsigned long	flow_time(t_time_helper *time);
 void			start_time(t_time_helper *time);
 void			ft_sleep(unsigned long ms);
