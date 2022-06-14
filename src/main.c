@@ -24,7 +24,7 @@ void	init_philo(t_philosopher *philo, size_t	idx, t_info *info)
 	philo->num = idx + 1;
 	philo->eat = 0;
 	philo->lock = 0;
-	philo->state = ALIVE | HUNGRY | info->is_Inf_eat;
+	philo->state = ALIVE | HUNGRY | info->is_inf_eat;
 	philo->time_to_die = info->time_to_die;
 	philo->time_to_eat = info->time_to_eat;
 	philo->time_to_sleep = info->time_to_sleep;
@@ -47,11 +47,11 @@ void	set_arg(int argc, char **argv, t_info *info)
 	info->time_to_eat = ft_atoi(argv[3]);
 	info->time_to_sleep = ft_atoi(argv[4]);
 	info->must_eat = 9876543210;
-	info->is_Inf_eat = INF_EAT;
+	info->is_inf_eat = INF_EAT;
 	if (argc == 6)
 	{
 		info->must_eat = ft_atoi(argv[5]);
-		info->is_Inf_eat = 0;
+		info->is_inf_eat = 0;
 	}
 }
 

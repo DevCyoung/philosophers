@@ -6,7 +6,7 @@
 /*   By: yoseo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 02:54:53 by yoseo             #+#    #+#             */
-/*   Updated: 2022/06/14 02:54:54 by yoseo            ###   ########.fr       */
+/*   Updated: 2022/06/14 11:08:58 by yoseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_atoi(char *str)
 		if ('0' <= *str && *str <= '9')
 			answer = answer * 10 + *str - '0';
 		else
-			return -1;
+			return (-1);
 		++str;
 	}
 	return (((int)answer) * is_plus);

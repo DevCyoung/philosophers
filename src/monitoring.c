@@ -6,7 +6,7 @@
 /*   By: yoseo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 02:56:44 by yoseo             #+#    #+#             */
-/*   Updated: 2022/06/14 11:03:50 by yoseo            ###   ########.fr       */
+/*   Updated: 2022/06/14 11:08:34 by yoseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,11 @@ int	check_philosophers(t_info *info)
 			if (flow_time(&philo->time) > philo->time_to_die)
 				philos_state |= DIE;
 		philos_state |= (philo->state & HUNGRY);
-		if ((philos_state & DIE))
-		{
-			philos_state ^= ALIVE;
-			break ;
-		}
 	}
 	pthread_mutex_unlock(&info->global_lock);
 	if ((philos_state & DIE))
 	{
+		philos_state ^= ALIVE;
 		philo_act(philo, DIE);
 		if (info->cnt == 1)
 			pthread_mutex_unlock(philo->first_fork);
