@@ -12,7 +12,6 @@
 
 #include "philosophers.h"
 
-
 void	print_log(t_philosopher *p, t_state philo_action)
 {
 	unsigned long	global_time;
@@ -31,7 +30,7 @@ void	print_log(t_philosopher *p, t_state philo_action)
 	else if (philo_action == SLEEPING)
 		printf("%ld %ld %s\n", global_time, philo_num, "is sleeping");
 	else if (philo_action == DIE)
-		printf("%ld %ld %s\n", global_time, philo_num, "is dying");
+		printf("%ld %ld %s\n", global_time, philo_num, "is died");
 }
 
 t_state	try_print_log(t_philosopher *philo, t_state philo_action)
@@ -40,12 +39,13 @@ t_state	try_print_log(t_philosopher *philo, t_state philo_action)
 		philo_action = DIE;
 	if (philo_action == EAT_DONE)
 	{
-		++philo->eat;
-		if (philo->eat == philo->must_eat)
+		if ((philo->state & INF_EAT) == 0)
+			++philo->eat;
+		if (philo->eat >= philo->must_eat)
 			philo->state ^= HUNGRY;
 		start_time(&philo->time);
 	}
-	if (philo_action == DIE)
+	if (philo_action == DIE && (philo->state & ALIVE))
 		philo->state ^= ALIVE;
 	print_log(philo, philo_action);
 	return (philo->state);
@@ -62,7 +62,7 @@ t_state	philo_act(t_philosopher *philo, t_state philo_action)
 	if (is_print)
 	{
 		philo_state = try_print_log(philo, philo_action);
-		if ((philo_state & ALIVE) == 0 || philo_action == DIE)
+		if ((philo_state & ALIVE) == 0)
 			is_print = 0;
 		if ((philo_state & ALIVE) == 0 || (philo_state & HUNGRY) == 0)
 			thread_state = CLEAR;

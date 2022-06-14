@@ -17,7 +17,7 @@ SRC_DIR 	= 	./src/
 INCLUE_DIR 	= 	./include/
 
 SRC  		= 	main.c\
-				philosopher.c\
+				philo_act.c\
 				ft_utils.c\
 				try_philo.c\
 				ft_time.c\

@@ -23,10 +23,12 @@ int	ft_atoi(char *str)
 		is_plus = -1;
 	if (*str == '-' || *str == '+')
 		++str;
-	while (*str && *str != ' ')
+	while (*str)
 	{
 		if ('0' <= *str && *str <= '9')
 			answer = answer * 10 + *str - '0';
+		else
+			return -1;
 		++str;
 	}
 	return (((int)answer) * is_plus);
@@ -71,7 +73,7 @@ int	is_error(int argc, char **argv)
 		error |= ERROR_EAT_TIME;
 	if (ft_atoi(argv[4]) <= 0)
 		error |= ERROR_SLEEP_TIME;
-	if (argc == 6 && ft_atoi(argv[5]) <= 0)
+	if (argc == 6 && ft_atoi(argv[5]) < 0)
 		error |= ERROR_MUST_EAT;
 	print_error(error);
 	return (error);

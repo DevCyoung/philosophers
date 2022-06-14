@@ -18,8 +18,6 @@
 # include <stdlib.h>
 # include <signal.h>
 # include "ft_time.h"
-# define TAKE_FIRST_FORK 5
-# define TAKE_SECOND_FORK 6
 
 typedef enum e_philo_state
 {
@@ -35,8 +33,7 @@ typedef enum e_philo_state
 	EAT_DONE = 512,
 	CLEAR = 1024,
 	HUNGRY = 2048,
-	ALL_FULL = HUNGRY << 1,
-	UNLOCK = ALL_FULL << 1,
+	INF_EAT = HUNGRY << 1,
 }	t_state;
 
 typedef struct s_philosopher
@@ -48,12 +45,11 @@ typedef struct s_philosopher
 	size_t		time_to_eat;
 	size_t		time_to_sleep;
 	size_t		must_eat;
-	size_t		checker;
 	size_t		lock;
+	size_t		state;
 	pthread_t	t_id;
 	pthread_mutex_t		*first_fork;
 	pthread_mutex_t		*second_fork;
-	size_t				state;
 	pthread_mutex_t 	*global_lock;
 	t_time_helper 		*global_time;
 	t_time_helper		time;
@@ -61,16 +57,15 @@ typedef struct s_philosopher
 
 typedef struct s_info
 {
-	t_philosopher	*philos;
+	pthread_mutex_t global_lock;
 	pthread_mutex_t	*fork;
-
-	int			cnt;
+	t_philosopher	*philos;
+	int				cnt;
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	size_t			must_eat;
-
-	pthread_mutex_t global_lock;
+	t_state			is_Inf_eat;
 	t_time_helper 	global_time;
 	
 } 	t_info;

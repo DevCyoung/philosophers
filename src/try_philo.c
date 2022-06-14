@@ -16,21 +16,21 @@ int	try_catch_fork(t_philosopher *philo)
 {
 	pthread_mutex_lock(philo->first_fork);
 	philo->lock |= 1;
-	if (philo_act(philo, TAKE_FORK) != ALIVE)
+	if (philo_act(philo, TAKE_FORK) == CLEAR)
 		return (CLEAR);
 	pthread_mutex_lock(philo->second_fork);
 	philo->lock |= 2;
-	if (philo_act(philo, TAKE_FORK) != ALIVE)
+	if (philo_act(philo, TAKE_FORK) == CLEAR)
 		return (CLEAR);
 	return (ALIVE);
 }
 
 int	try_eat(t_philosopher *philo)
 {
-	if (philo_act(philo, EATING) != ALIVE)
+	if (philo_act(philo, EATING) == CLEAR)
 		return (CLEAR);
 	ft_sleep(philo->time_to_eat);
-	if (philo_act(philo, EAT_DONE) != ALIVE)
+	if (philo_act(philo, EAT_DONE) == CLEAR)
 		return (CLEAR);
 	philo->lock = 0;
 	pthread_mutex_unlock(philo->second_fork);
@@ -40,7 +40,7 @@ int	try_eat(t_philosopher *philo)
 
 int	try_sleep(t_philosopher *philo)
 {
-	if (philo_act(philo, SLEEPING) != ALIVE)
+	if (philo_act(philo, SLEEPING) == CLEAR)
 		return (CLEAR);
 	ft_sleep(philo->time_to_sleep);
 	return (ALIVE);
@@ -48,7 +48,7 @@ int	try_sleep(t_philosopher *philo)
 
 int	try_think(t_philosopher *philo)
 {
-	if (philo_act(philo, THINKING) != ALIVE)
+	if (philo_act(philo, THINKING) == CLEAR)
 		return (CLEAR);
 	ft_sleep(3);
 	return (ALIVE);

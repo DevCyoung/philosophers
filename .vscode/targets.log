@@ -7,7 +7,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 
 # This program built for i386-apple-darwin11.3.0
 
-# Make data base, printed on Tue Jun 14 07:12:50 2022
+# Make data base, printed on Tue Jun 14 10:25:11 2022
 
 # Variables
 
@@ -16,7 +16,9 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # automatic
 ?F = $(notdir $?)
 # makefile (from `Makefile', line 19)
-SRC = main.c philosopher.c ft_utils.c try_philo.c ft_time.c monitoring.c
+SRC = main.c philo_act.c ft_utils.c try_philo.c ft_time.c monitoring.c
+# environment
+LC_CTYPE = UTF-8
 # environment
 VSCODE_LOG_NATIVE = false
 # automatic
@@ -26,7 +28,7 @@ VSCODE_LOG_NATIVE = false
 # automatic
 @F = $(notdir $@)
 # makefile
-CURDIR := /Users/yoseo/42/philosophers
+CURDIR := /Users/yoseo/42/philo
 # makefile
 SHELL = /bin/sh
 # environment
@@ -42,13 +44,13 @@ VSCODE_VERBOSE_LOGGING = true
 # makefile (from `Makefile', line 27)
 OBJS = $(SRCS:%.c=%.o)
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/zz/zyxvpxvq6csfxvn_n000cmdh00353c/T/vscode-ipc-bdcd51fc-d8a8-48a5-aed1-aa819f64aac4.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/zz/zyxvpxvq6csfxvn_n000cmdh00353c/T/vscode-ipc-e358e141-08df-4577-bf30-629c9023c068.sock
 # environment
-VSCODE_CWD = /
+VSCODE_CWD = /Users/yoseo/42/philo
 # environment
 PATH = /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
 # environment
-LaunchInstanceID = 3D381D4B-31DE-428F-A5E9-407B5BFDBEA2
+LaunchInstanceID = CA4536E4-886F-4CF1-A08F-8621A0D3A74F
 # environment
 VSCODE_LOG_STACK = false
 # environment
@@ -56,13 +58,13 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.5BktLiZrw3/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.MLPRtNvujI/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-PWD = /Users/yoseo/42/philosophers
+PWD = /Users/yoseo/42/philo
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = undefined
 # environment
@@ -85,14 +87,16 @@ VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
 XPC_FLAGS = 0x0
+# environment
+COLORTERM = truecolor
 # default
 MAKE = $(MAKE_COMMAND)
-# default
-MAKECMDGOALS := all
+# environment
+LC_TERMINAL = iTerm2
 # makefile (from `Makefile', line 26)
 SRCS = $(addprefix $(SRC_DIR), $(SRC))
 # environment
-SHLVL = 1
+SHLVL = 2
 # makefile (from `Makefile', line 14)
 CC = cc
 # default
@@ -101,12 +105,18 @@ MAKE_VERSION := 3.81
 USER = yoseo
 # makefile
 .DEFAULT_GOAL := all
+# default
+MAKECMDGOALS := all
+# environment
+TERM_SESSION_ID = w0t0p0:1653E3BE-A5AC-4DC6-A4D9-098F626E0A04
 # makefile (from `Makefile', line 13)
 NAME = philo
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # default
 MAKE_COMMAND := /Applications/Xcode.app/Contents/Developer/usr/bin/make
+# environment
+TERM_PROGRAM = iTerm.app
 # default
 .VARIABLES := 
 # environment
@@ -122,11 +132,19 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = com.apple.xpc.launchd.oneshot.0x10000001.Electron
+TERM_PROGRAM_VERSION = 3.3.7
+# environment
+XPC_SERVICE_NAME = com.microsoft.VSCode.9124.1859F420-700B-4485-9F41-44D778BB9DE1
+# environment
+LC_TERMINAL_VERSION = 3.3.7
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
 +F = $(notdir $+)
+# environment
+ITERM_SESSION_ID = w0t0p0:1653E3BE-A5AC-4DC6-A4D9-098F626E0A04
+# environment
+COLORFGBG = 12;8
 # environment
 __CF_USER_TEXT_ENCODING = 0x1946C:0x0:0x0
 # environment
@@ -138,9 +156,11 @@ SRC_DIR = ./src/
 # automatic
 <F = $(notdir $<)
 # environment
+ITERM_PROFILE = Default
+# environment
 LC_ALL = C
 # environment
-SECURITYSESSIONID = 186a5
+SECURITYSESSIONID = 186a6
 # automatic
 ^F = $(notdir $^)
 # default
@@ -152,9 +172,11 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 10547
+TERM = xterm-256color
+# environment
+VSCODE_PID = 2169
 # variable set hash-table stats:
-# Load=71/1024=7%, Rehash=0, Collisions=3/101=3%
+# Load=82/1024=8%, Rehash=0, Collisions=6/112=5%
 
 # Pattern-specific Variable Values
 
@@ -162,10 +184,10 @@ VSCODE_PID = 10547
 
 # Directories
 
-# . (device 16777225, inode 829082): 8 files, no impossibilities.
+# . (device 16777225, inode 829082): 9 files, no impossibilities.
 # src (device 16777225, inode 829140): 13 files, no impossibilities so far.
 
-# 21 files, no impossibilities in 2 directories.
+# 22 files, no impossibilities in 2 directories.
 
 # Implicit Rules
 
@@ -181,7 +203,7 @@ VSCODE_PID = 10547
 # Not a target:
 src/try_philo.c:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-14 03:11:09
+#  Last modified 2022-06-14 10:19:25
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -197,27 +219,15 @@ all: philo
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-philo: src/main.o src/philosopher.o src/ft_utils.o src/try_philo.o src/ft_time.o src/monitoring.o
+philo: src/main.o src/philo_act.o src/ft_utils.o src/try_philo.o src/ft_time.o src/monitoring.o
 #  Implicit rule search has not been done.
-#  Last modified 2022-06-14 04:12:22
+#  Last modified 2022-06-14 10:22:46
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 #  commands to execute (from `Makefile', line 36):
 	$(CC) -o $@ $^ -pthread
-	
-
-src/philosopher.o: src/philosopher.c
-#  Implicit rule search has been done.
-#  Implicit/static pattern stem: `src/philosopher'
-#  Last modified 2022-06-14 03:54:38
-#  File has been updated.
-#  Successfully updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
-#  commands to execute (from `Makefile', line 39):
-	$(CC) $(CFLAGS) -o $@ -c $^ -I $(INCLUE_DIR)
 	
 
 .PHONY: all clean fclean re bonus
@@ -228,7 +238,7 @@ src/philosopher.o: src/philosopher.c
 src/main.o: src/main.c
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: `src/main'
-#  Last modified 2022-06-14 03:54:38
+#  Last modified 2022-06-14 10:13:30
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -255,7 +265,7 @@ src/ft_time.c:
 src/monitoring.o: src/monitoring.c
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: `src/monitoring'
-#  Last modified 2022-06-14 04:12:22
+#  Last modified 2022-06-14 10:13:30
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -267,16 +277,16 @@ src/monitoring.o: src/monitoring.c
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-13 19:48:01
+#  Last modified 2022-06-14 08:42:06
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # Not a target:
-src/philosopher.c:
+src/philo_act.c:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-14 03:52:30
+#  Last modified 2022-06-14 10:17:09
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -300,17 +310,17 @@ fclean: clean
 # Not a target:
 src/main.c:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-14 03:12:12
+#  Last modified 2022-06-14 10:10:56
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
+ 
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # Not a target:
 src/monitoring.c:
 #  Implicit rule search has been done.
- 
-#  Last modified 2022-06-14 04:12:20
+#  Last modified 2022-06-14 08:48:32
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -325,7 +335,7 @@ src/monitoring.c:
 src/ft_utils.o: src/ft_utils.c
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: `src/ft_utils'
-#  Last modified 2022-06-14 03:54:38
+#  Last modified 2022-06-14 10:13:30
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -352,7 +362,7 @@ clean:
 src/try_philo.o: src/try_philo.c
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: `src/try_philo'
-#  Last modified 2022-06-14 03:54:38
+#  Last modified 2022-06-14 10:22:46
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -372,7 +382,7 @@ racecheck:
 src/ft_time.o: src/ft_time.c
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: `src/ft_time'
-#  Last modified 2022-06-14 03:54:38
+#  Last modified 2022-06-14 10:13:30
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -384,11 +394,23 @@ src/ft_time.o: src/ft_time.c
 # Not a target:
 src/ft_utils.c:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-14 02:55:27
+#  Last modified 2022-06-14 10:13:26
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+src/philo_act.o: src/philo_act.c
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `src/philo_act'
+#  Last modified 2022-06-14 10:22:46
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 39):
+	$(CC) $(CFLAGS) -o $@ -c $^ -I $(INCLUE_DIR)
+	
 
 # files hash-table stats:
 # Load=23/1024=2%, Rehash=0, Collisions=9/69=13%
@@ -403,6 +425,6 @@ src/ft_utils.c:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Jun 14 07:12:50 2022
+# Finished Make data base on Tue Jun 14 10:25:11 2022
 
  

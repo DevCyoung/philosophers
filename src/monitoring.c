@@ -6,7 +6,7 @@
 /*   By: yoseo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 02:56:44 by yoseo             #+#    #+#             */
-/*   Updated: 2022/06/14 02:56:45 by yoseo            ###   ########.fr       */
+/*   Updated: 2022/06/14 11:03:50 by yoseo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int	check_philosophers(t_info *info)
 {
-	int	i;
+	int				i;
 	unsigned int	philos_state;
 	t_philosopher	*philo;
 
 	pthread_mutex_lock(&info->global_lock);
-	i = 0;
+	i = -1;
 	philos_state = ALIVE;
-	while (i < info->cnt)
+	while (++i < info->cnt)
 	{
 		philo = &info->philos[i];
 		if (philo->state & HUNGRY)
@@ -31,9 +31,8 @@ int	check_philosophers(t_info *info)
 		if ((philos_state & DIE))
 		{
 			philos_state ^= ALIVE;
-			break;
+			break ;
 		}
-		++i;
 	}
 	pthread_mutex_unlock(&info->global_lock);
 	if ((philos_state & DIE))

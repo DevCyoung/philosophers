@@ -1,13 +1,11 @@
 make --dry-run --always-make --keep-going --print-directory
-make: Entering directory `/Users/yoseo/42/philosophers'
+make: Entering directory `/Users/yoseo/42/philo'
 cc -Wall -Wextra -Werror -o src/main.o -c src/main.c -I ./include/
- 
-cc -Wall -Wextra -Werror -o src/philosopher.o -c src/philosopher.c -I ./include/
+cc -Wall -Wextra -Werror -o src/philo_act.o -c src/philo_act.c -I ./include/
 cc -Wall -Wextra -Werror -o src/ft_utils.o -c src/ft_utils.c -I ./include/
 cc -Wall -Wextra -Werror -o src/try_philo.o -c src/try_philo.c -I ./include/
 cc -Wall -Wextra -Werror -o src/ft_time.o -c src/ft_time.c -I ./include/
- 
 cc -Wall -Wextra -Werror -o src/monitoring.o -c src/monitoring.c -I ./include/
-cc -o philo src/main.o src/philosopher.o src/ft_utils.o src/try_philo.o src/ft_time.o src/monitoring.o -pthread
-make: Leaving directory `/Users/yoseo/42/philosophers'
+cc -o philo src/main.o src/philo_act.o src/ft_utils.o src/try_philo.o src/ft_time.o src/monitoring.o -pthread
+make: Leaving directory `/Users/yoseo/42/philo'
  

@@ -24,22 +24,34 @@ void	init_philo(t_philosopher *philo, size_t	idx, t_info *info)
 	philo->num = idx + 1;
 	philo->eat = 0;
 	philo->lock = 0;
-	philo->state = ALIVE | HUNGRY;
+	philo->state = ALIVE | HUNGRY | info->is_Inf_eat;
 	philo->time_to_die = info->time_to_die;
 	philo->time_to_eat = info->time_to_eat;
 	philo->time_to_sleep = info->time_to_sleep;
 	philo->must_eat = info->must_eat;
 	philo->global_lock = &info->global_lock;
 	philo->global_time = &info->global_time;
+	philo->first_fork = &info->fork[left_idx];
+	philo->second_fork = &info->fork[idx];
 	if (philo->num % 2)
 	{
 		philo->first_fork = &info->fork[idx];
 		philo->second_fork = &info->fork[left_idx];
 	}
-	else
+}
+
+void	set_arg(int argc, char **argv, t_info *info)
+{
+	info->cnt = ft_atoi(argv[1]);
+	info->time_to_die = ft_atoi(argv[2]);
+	info->time_to_eat = ft_atoi(argv[3]);
+	info->time_to_sleep = ft_atoi(argv[4]);
+	info->must_eat = 9876543210;
+	info->is_Inf_eat = INF_EAT;
+	if (argc == 6)
 	{
-		philo->first_fork = &info->fork[left_idx];
-		philo->second_fork = &info->fork[idx];
+		info->must_eat = ft_atoi(argv[5]);
+		info->is_Inf_eat = 0;
 	}
 }
 
@@ -48,13 +60,7 @@ int	try_init_info(int argc, char **argv, t_info *info)
 	int	i;
 
 	i = -1;
-	info->cnt = ft_atoi(argv[1]);
-	info->time_to_die = ft_atoi(argv[2]);
-	info->time_to_eat = ft_atoi(argv[3]);
-	info->time_to_sleep = ft_atoi(argv[4]);
-	info->must_eat = 4294967295;
-	if (argc == 6)
-		info->must_eat = ft_atoi(argv[5]);
+	set_arg(argc, argv, info);
 	info->fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * info->cnt);
 	if (info->fork == NULL)
 		return (0);
@@ -92,5 +98,7 @@ int	main(int argc, char **argv)
 	i = -1;
 	while (++i < info.cnt)
 		pthread_join(info.philos[i].t_id, NULL);
+	free(info.fork);
+	free(info.philos);
 	return (0);
 }
